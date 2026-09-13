@@ -1,0 +1,202 @@
+/* The overlay pill. It is drawn over other people's software, so it commits to one look
+   rather than following a theme: a dark translucent slab with light type, legible over a
+   bright desktop and over a dark game without changing between them.
+
+   Nothing here may take a solid background on <html> or <body>. The window is transparent,
+   and a background anywhere above the pill turns the overlay into a black rectangle. */
+
+:root {
+  --pill-bg: rgba(24, 25, 28, 0.82);
+  --pill-line: rgba(255, 255, 255, 0.09);
+  --ink: #f2f3f5;
+  --ink-dim: #b5bac1;
+
+  --live: #3ba55d;
+  --muted: #ed4245;
+  --idle: #b5bac1;
+  --none: #f0b132;
+
+  /* Set from the saved settings before the first frame. */
+  --opacity: 0.85;
+
+  font-family: 'Segoe UI', Tahoma, system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+  /* The window is click-through already; this stops a stray drag selecting the label if
+     that ever changes. */
+  user-select: none;
+  cursor: default;
+  overflow: hidden;
+}
+
+/* The pill hugs the same corner of the window as the window does of the screen, so the
+   shadow has somewhere to fall and the gap to the screen edge is the one that was asked
+   for. */
+body {
+  display: flex;
+  padding: 6px;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+body[data-corner='top-left'] {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+body[data-corner='bottom-right'] {
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+body[data-corner='bottom-left'] {
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  padding: 9px 14px;
+  border-radius: 12px;
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-line);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  color: var(--ink);
+  opacity: var(--opacity);
+  /* Frosts whatever is behind it, which is what makes a translucent panel read as glass
+     rather than as a smear of the game underneath. */
+  backdrop-filter: blur(12px);
+  transition: opacity 160ms ease;
+}
+
+/* --- the microphone glyph ------------------------------------------------- */
+
+.glyph {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.mic {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Exactly one of the two is ever in the layout. */
+.mic-muted,
+.pill[data-mode='muted'] .mic-open {
+  display: none;
+}
+
+.pill[data-mode='muted'] .mic-muted {
+  display: block;
+}
+
+.pill[data-mode='live'] .glyph {
+  color: var(--live);
+}
+
+.pill[data-mode='muted'] .glyph {
+  color: var(--muted);
+}
+
+.pill[data-mode='idle'] .glyph {
+  color: var(--idle);
+}
+
+.pill[data-mode='none'] .glyph {
+  color: var(--none);
+}
+
+/* --- the words ------------------------------------------------------------ */
+
+.text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.detail {
+  font-size: 11px;
+  color: var(--ink-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.detail:empty {
+  display: none;
+}
+
+/* --- the level meter ------------------------------------------------------ */
+
+/* Three bars rather than a continuous bar: at this size a smooth meter reads as a flicker,
+   and three steps are enough to tell "speaking" from "open but silent". */
+.meter {
+  display: none;
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px;
+  margin-left: 2px;
+}
+
+.pill[data-mode='live'] .meter {
+  display: flex;
+}
+
+.meter i {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--ink-dim);
+  opacity: 0.25;
+  transition: opacity 90ms linear, background-color 90ms linear;
+}
+
+.meter i:nth-child(1) {
+  height: 7px;
+}
+
+.meter i:nth-child(2) {
+  height: 11px;
+}
+
+.meter i:nth-child(3) {
+  height: 16px;
+}
+
+.meter i.lit {
+  background: var(--live);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill,
+  .meter i {
+    transition: none;
+  }
+}

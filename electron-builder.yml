@@ -1,0 +1,22 @@
+appId: com.waleedalghool.micoverlay
+productName: Mic Overlay
+directories:
+  output: release
+  buildResources: build
+files:
+  - out/**
+  - package.json
+# micprobe.exe and the tray icons, laid straight into resources/ beside app.asar - the paths
+# main/mic.ts and main/tray.ts build when app.isPackaged is true.
+extraResources:
+  - from: resources
+    to: .
+win:
+  target: dir
+  icon: build/icon.ico
+  executableName: MicOverlay
+  # Deliberately not elevated. Nothing here needs administrator rights - reading the audio
+  # endpoint and drawing a window are both ordinary user work - and an elevated app cannot
+  # be started from the Run key without a UAC prompt at every login, which would defeat
+  # "start with Windows".
+  requestedExecutionLevel: asInvoker

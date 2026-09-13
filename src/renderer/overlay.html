@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
+    />
+    <title>Mic Overlay</title>
+  </head>
+  <body>
+    <!-- One pill, redrawn in place. Both microphone glyphs are in the document from the
+         start and swapped by CSS, so changing state is a class change rather than a
+         re-parse - this repaints while a game is running. -->
+    <div class="pill" id="pill" data-mode="idle">
+      <span class="glyph">
+        <svg class="mic mic-open" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="9" y="2" width="6" height="11" rx="3" />
+          <path d="M5 11a7 7 0 0 0 14 0" />
+          <path d="M12 18v3" />
+          <path d="M8.5 21h7" />
+        </svg>
+
+        <svg class="mic mic-muted" viewBox="0 0 24 24" aria-hidden="true">
+          <!-- The slash is cut out of the microphone rather than laid over it, so the pill
+               shows through the gap the way a "no" sign does. -->
+          <mask id="slash-cut">
+            <rect x="0" y="0" width="24" height="24" fill="white" />
+            <line
+              x1="3.2"
+              y1="3.2"
+              x2="20.8"
+              y2="20.8"
+              stroke="black"
+              stroke-width="5"
+              stroke-linecap="round"
+            />
+          </mask>
+          <g mask="url(#slash-cut)">
+            <rect x="9" y="2" width="6" height="11" rx="3" />
+            <path d="M5 11a7 7 0 0 0 14 0" />
+            <path d="M12 18v3" />
+            <path d="M8.5 21h7" />
+          </g>
+          <line x1="3.8" y1="3.8" x2="20.2" y2="20.2" />
+        </svg>
+      </span>
+
+      <span class="text">
+        <span class="label" id="label">Microphone</span>
+        <span class="detail" id="detail"></span>
+      </span>
+
+      <span class="meter" id="meter" aria-hidden="true">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+    </div>
+
+    <script type="module" src="/overlay/overlay.ts"></script>
+  </body>
+</html>

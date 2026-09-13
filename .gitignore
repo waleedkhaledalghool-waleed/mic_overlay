@@ -1,0 +1,10 @@
+node_modules/
+out/
+release/
+installer-output/
+build/
+resources/
+*.tsbuildinfo
+.claude
+native/
+installer/

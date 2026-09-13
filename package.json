@@ -1,0 +1,30 @@
+{
+  "name": "mic-overlay",
+  "version": "1.0.0",
+  "description": "A microphone indicator that sits over your games, and a tray switch to turn it off",
+  "main": "./out/main/index.js",
+  "author": "Waleed Alghool",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "probe": "node tools/build-probe.mjs",
+    "icons": "node tools/make-icon.mjs",
+    "dev": "npm run probe && npm run icons && electron-vite dev",
+    "build": "npm run probe && npm run icons && tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json && electron-vite build",
+    "start": "electron-vite preview",
+    "dist": "npm run build && electron-builder --win --dir"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "@vitejs/plugin-react": "^5.2.0",
+    "electron": "^44.1.0",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^5.0.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "typescript": "^7.0.2",
+    "vite": "^7.3.6"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "./out/types-web"
+  },
+  "include": [
+    "src/renderer/src/**/*",
+    "src/renderer/overlay/**/*",
+    "src/preload/index.d.ts",
+    "src/shared/**/*"
+  ]
+}
